@@ -64,12 +64,12 @@ park_heatmap_weekly_seasonal("P11", park_gr)
 ```
 
 
-# Saturday parking
+# Sunday parking
 
 Darker red: more cars parked.
 
 ```{r}
-map_parking_timefilter(park_gr, hr = 12, day = "Saturday")
+map_parking_timefilter(park_gr, hr = 12, day = "Sunday")
 ```
 
 

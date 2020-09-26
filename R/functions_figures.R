@@ -93,7 +93,7 @@ map_parking_locations <- function(data){
 # Map of average number of cars parked around noon on saturday.
 map_parking_timefilter <- function(data, 
                                    hr = 12, 
-                                   day = "Saturday", 
+                                   day = "Sunday", 
                                    map_locations = parking_map){
 
   
