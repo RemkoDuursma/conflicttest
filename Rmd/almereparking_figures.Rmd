@@ -1,0 +1,78 @@
+---
+title: "Almere Parking - Figures"
+author: "Remko Duursma"
+output: 
+  html_document:
+    theme: flatly
+    code_folding: hide
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Parking locations
+
+```{r}
+# Kaart
+map_parking_locations(parking_map)
+```
+
+
+# Timeseries
+
+```{r}
+park_timeseries_plot(park, "2019-10-1", "2019-10-8", 
+                     title = "Originele data")
+```
+
+
+```{r}
+park_timeseries_plot(park_gr, "2019-10-1", "2019-10-8",
+                     title = "Gecalibreerde data")
+```
+
+
+```{r}
+weekly_timeseries_plot(park_gr)
+```
+
+
+
+# Average number of parked cars per week day
+
+```{r}
+day_week_overlay_plot("P11", park_gr)
+```
+
+
+# Heatmap - hour + week day
+
+```{r}
+park_heatmap_hourly(park_gr)
+```
+
+
+# Heatmap - week + season
+
+```{r}
+park_heatmap_weekly_seasonal("P11", park_gr)
+```
+
+
+# Saturday parking
+
+Darker red: more cars parked.
+
+```{r}
+map_parking_timefilter(park_gr, hr = 12, day = "Saturday")
+```
+
+
+
+
+
