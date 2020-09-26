@@ -29,17 +29,6 @@ park_gr <- clean_parking_raw(parking_raw, calibrate = TRUE)
 park_hr <- aggregate_parking(park_gr)
 
 
-# 3. Models
-
-# A model using day of the week.
-model1 <- fit_model_randomforest(park_hr, form = 1)
-
-# A model without day of the week.
-model2 <- fit_model_randomforest(park_hr, form = 2)
-
-# Predict number of cars parked for the current time.
-p_now <- predict_parking_now(model1, where = "P1")
-write.table(p_now, "output/data/voorspelling_now.txt")
 
 
 # 4. Rapport met figuren
