@@ -14,9 +14,9 @@ park_timeseries_plot <- function(data, begin, end, title = ""){
 }
 
 
-day_week_overlay_plot <- function(garage, data, title = garage){
+day_week_overlay_plot <- function(lab, data, title = garage){
 
-  filter(data, label == garage) %>% 
+  filter(data, label == lab) %>% 
     mutate(Date = as.Date(updated)) %>% 
     group_by(wday(Date, label = TRUE), hour(updated)) %>% 
     summarize(parked = mean(parked, na.rm=TRUE)) %>%
@@ -24,7 +24,7 @@ day_week_overlay_plot <- function(garage, data, title = garage){
   
   ggplot(aes(x = Uur, y = parked, col = Weekday)) + 
     geom_line(lwd = 1) + 
-    theme_bw() +
+    theme_minimal() +
     labs(title = title)
 
 }
@@ -35,7 +35,7 @@ day_week_overlay_plot <- function(garage, data, title = garage){
 park_heatmap_hourly <- function(data){
   
   mutate(data, 
-         weekday = wday(Date, abbr=FALSE, label = TRUE),
+         weekday = wday(Date, abbr = FALSE, label = TRUE),
          hour = hour(updated)) %>%
     group_by(hour, weekday) %>%
     summarize(parked_max = max(parked),
@@ -57,6 +57,7 @@ weekly_timeseries_plot <- function(data){
     
     ggplot(aes(x = week_time_15, y = parked)) +
     geom_line() +
+    geom_point() +
     facet_wrap(~label)
   
 }
@@ -70,7 +71,7 @@ park_heatmap_weekly_seasonal <- function(garage, data){
          week_time_30 = floor(week_time / 30)) %>% 
     group_by(label, week, week_time_30) %>%
     summarize(parked = mean(parked)) %>%
-  filter(label == garage) %>%
+  dplyr::filter(label == garage) %>%
     ggplot(aes(x = week, y = week_time_30, fill = parked)) +
     geom_tile() +
     scale_fill_viridis_c() +
@@ -81,9 +82,10 @@ park_heatmap_weekly_seasonal <- function(garage, data){
 # Kaart van parkeer plaatsen
 map_parking_locations <- function(data){
   
-  leaflet(data) %>%
-    addMarkers(~lon, ~lat, label = paste(data$label, data$naam)) %>%
-    addTiles()
+  lab <- paste(data$label, data$naam)
+  leaflet::leaflet(data) %>%
+    leaflet::addMarkers(~lon, ~lat, label = lab) %>%
+    leaflet::addTiles()
   
 }
 
