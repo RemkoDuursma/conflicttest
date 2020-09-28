@@ -2,10 +2,10 @@
 park_timeseries_plot <- function(data, begin, end, title = ""){
   
   dplyr::filter(data, 
-                as.Date(updated) > as.Date(begin),
-                as.Date(updated) < as.Date(end)
+                as.Date(updated) > as.Date(!!begin),
+                as.Date(updated) < as.Date(!!end)
   ) %>% 
-    ggplot(aes(x = updated, y=parked, col=label)) +
+    ggplot(aes(x = updated, y = parked, col=label)) +
     geom_line() +
     scale_colour_manual(values = randomColor(nlevels(park$label), "blue")) +
     theme_bw() +
@@ -14,9 +14,9 @@ park_timeseries_plot <- function(data, begin, end, title = ""){
 }
 
 
-day_week_overlay_plot <- function(garage, data, title = garage){
+day_week_overlay_plot <- function(location, data, title = garage){
 
-  filter(data, label == garage) %>% 
+  filter(data, label == !!location) %>% 
     mutate(Date = as.Date(updated)) %>% 
     group_by(wday(Date, label = TRUE), hour(updated)) %>% 
     summarize(parked = mean(parked, na.rm=TRUE)) %>%
@@ -25,7 +25,7 @@ day_week_overlay_plot <- function(garage, data, title = garage){
   ggplot(aes(x = Uur, y = parked, col = Weekday)) + 
     geom_line(lwd = 1) + 
     theme_bw() +
-    labs(title = title)
+    labs(title = !!title)
 
 }
 
@@ -82,8 +82,8 @@ park_heatmap_weekly_seasonal <- function(garage, data){
 map_parking_locations <- function(data){
   
   leaflet(data) %>%
-    addMarkers(~lon, ~lat, label = paste(data$label, data$naam)) %>%
-    addTiles()
+    addProviderTiles("OpenStreetMap.Mapnik") %>%
+    addCircleMarkers(~lon, ~lat, label = paste(data$label, data$naam))
   
 }
 
